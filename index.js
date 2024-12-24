@@ -37,6 +37,8 @@ async function run() {
 
     // step 7 Get the database and collection on which to run the operation
     const serviceCollection = client.db('next_door_service').collection('company_services');
+    // step 10 service booking collection 
+    const bookingCollection = client.db('next_door_service').collection('service_booking');
 
     // step 8 all services api
     app.get('/services', async(req, res) =>{
@@ -53,6 +55,14 @@ async function run() {
         const result = await serviceCollection.findOne(query);
         res.send(result);
     });
+
+
+    // step 11 service booking
+    app.post('/service-bookings', async(req, res)=>{
+        const booking = req.body;
+        const result = await bookingCollection.insertOne(booking)
+        res.send(result)
+    })
 
 
 
