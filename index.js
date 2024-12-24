@@ -56,14 +56,20 @@ async function run() {
         res.send(result);
     });
 
+    // step 12 getting people through email
+    app.get('/single-booking', async(req, res) =>{
+        const email = req.query.email;
+        const query = {user_email: email }
+        const result = await bookingCollection.find(query).toArray();
+        res.send(result);
+    });
 
     // step 11 service booking
     app.post('/service-bookings', async(req, res)=>{
         const booking = req.body;
         const result = await bookingCollection.insertOne(booking)
         res.send(result)
-    })
-
+    });
 
 
   } finally {
