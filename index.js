@@ -103,13 +103,45 @@ async function run() {
         const filter = {_id: new ObjectId(id)};
         const updatedDoc = {
             $set:{
-                status : data.service_status
+                service_status : data.service_status
             }
         }
         const result = await bookingCollection.updateOne(filter, updatedDoc);
         res.send(result);
+    });
+
+    // step 18 delete function
+    app.delete('/services/:id', async(req, res) => {
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)}
+        const result = await serviceCollection.deleteOne(query)
+        res.send(result);
+    });
+
+    // step 19 update service
+    app.put('/services/:id', async(req, res) =>{
+        const id = req.params.id;
+        const filter = {_id: new ObjectId(id)};
+        const option = {upsert : true};
+        const updatedService = req.body;
+        const updatedServices = {
+            $set: {
+                service_name : updatedService.service_name, 
+                image_url : updatedService.image_url,
+                price : updatedService.price, 
+                description : updatedService.description, 
+                service_provider_email : updatedService.service_provider_email, 
+                rating : updatedService.rating, 
+                reviews_count : updatedService.reviews_count, 
+                service_provider_location : updatedService.service_provider_location, 
+                service_provider_name : updatedService.service_provider_name, 
+                service_provider_photo : updatedService.service_provider_photo, 
+                service_type : updatedService.service_type
+            }
+        }
+        const result = await serviceCollection.updateOne(filter, updatedServices, option)
+        res.send(result);
     })
-    
 
   } finally {
     // Ensures that the client will close when you finish/error
