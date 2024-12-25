@@ -71,6 +71,13 @@ async function run() {
         res.send(result)
     });
 
+    // step 13 add new service related api
+    app.post('/services', async(req, res) =>{
+        const newService = req.body;
+        const result = await serviceCollection.insertOne(newService);
+        res.send(result);
+    });
+
 
   } finally {
     // Ensures that the client will close when you finish/error
