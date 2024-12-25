@@ -42,7 +42,15 @@ async function run() {
 
     // step 8 all services api
     app.get('/services', async(req, res) =>{
-        const cursor = serviceCollection.find();
+        // step 14 getting job from particular email
+        const email = req.query.email;
+        let query = {};
+        if(email){
+            query = {service_provider_email : email}
+        }
+
+        // step 15 set the query in find
+        const cursor = serviceCollection.find(query);
         const result = await cursor.toArray();
         // const result = await serviceCollection.find({name : "test service", price : 100});
         res.send(result);
@@ -64,6 +72,7 @@ async function run() {
         res.send(result);
     });
 
+
     // step 11 service booking
     app.post('/service-bookings', async(req, res)=>{
         const booking = req.body;
@@ -78,6 +87,29 @@ async function run() {
         res.send(result);
     });
 
+
+    // step 16 single booking by id
+    app.get('/single-booking/:id', async(req, res) =>{
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)};
+        const result = await bookingCollection.findOne(query);
+        res.send(result);
+    });
+
+    // step 17 update status
+    app.patch('/single-booking/:id', async(req, res) =>{
+        const id = req.params.id;
+        const data = req.body;
+        const filter = {_id: new ObjectId(id)};
+        const updatedDoc = {
+            $set:{
+                status : data.service_status
+            }
+        }
+        const result = await bookingCollection.updateOne(filter, updatedDoc);
+        res.send(result);
+    })
+    
 
   } finally {
     // Ensures that the client will close when you finish/error
