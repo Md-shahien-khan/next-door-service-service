@@ -42,7 +42,7 @@ async function run() {
 
     // step 8 all services api
     app.get('/services', async(req, res) =>{
-        // step 14 getting job from particular email
+        // step 14 getting services from particular email
         const email = req.query.email;
         let query = {};
         if(email){
@@ -56,7 +56,7 @@ async function run() {
         res.send(result);
     });
 
-    // step 9 get specific service trough id
+    // step 9 get the specific service trough id
     app.get('/services/:id', async(req, res) =>{
         const id = req.params.id;
         const query = {_id: new ObjectId(id)};
